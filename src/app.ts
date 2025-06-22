@@ -1,40 +1,30 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import ErrorMiddleware from "./app/middlewares/error";
+import middlewareForErrorHandler from "./app/middlewares/error";
 import ErrorHandler from "./app/utils/errorHandler";
 import bookRoute from "./app/routes/book.route";
 
-// Create an instance of the Express application
+
 const app: Application = express();
 
-// Middleware to parse incoming JSON requests
+
 app.use(express.json());
 
-/**
- * Test route to verify if the server is running properly
- * Accessible via GET http://localhost:PORT/test
- */
-app.get("/test", (_, res: Response) => {
+
+app.get("/", (_, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Library Management server is running",
   });
 });
 
-// All routes
+
 app.use("/api", bookRoute);
 
-/**
- * Catch-all middleware for handling unknown routes (404 Not Found).
- * This middleware runs after all route handlers.
- * If no route matched the request, it creates a 404 error and passes it to the error handler.
- */
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(new ErrorHandler(`Route ${req.originalUrl} not found`, 404));
 });
-/**
- * Centralized error-handling middleware
- * This will catch all errors passed by `next()` and send a proper response
- */
-app.use(ErrorMiddleware);
+
+app.use(middlewareForErrorHandler);
 
 export default app;

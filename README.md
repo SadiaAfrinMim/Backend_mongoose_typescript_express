@@ -48,18 +48,6 @@ A full-featured RESTful API built with **Express**, **TypeScript**, and **MongoD
 
 ---
 
-## 🧪 Example: Create Book
-
-```http
-POST /api/books
-Content-Type: application/json
-
-{
-  "title": "The Theory of Everything",
-  "author": "Stephen Hawking",
-  "genre": "SCIENCE",
-  "isbn": "9780553380163",
-  "description": "An overview of cosmology and black holes.",
-  "copies": 5,
-  "available": true
-}
+## git-repositiory: https://github.com/SadiaAfrinMim/Backend_mongoose_typescript_express
+## live-deployment:https://librarymanagementapplication.vercel.app/
+##video-link:https://drive.google.com/drive/folders/1ibrGRz74A1iBdWV9gGViiEhxcnh68ta3?usp=sharing
