@@ -1,6 +1,12 @@
-import { model, Schema } from "mongoose";
+import { Model, model, Schema, Types } from "mongoose";
 import { Book, genreEnum } from "../schemas/book.schema";
-import { boolean } from "zod";
+
+interface BookModelType extends Model<Book> {
+  updateBookStatus(
+    bookId: Schema.Types.ObjectId,
+    quantity: number
+  ): Promise<Book>;
+}
 
 const bookSchema = new Schema<Book>(
   {
@@ -51,4 +57,26 @@ const bookSchema = new Schema<Book>(
   { timestamps: true, versionKey: false }
 );
 
-export const Books = model<Book>("Books", bookSchema);
+// Static method for update the book collection when someone will borrow book
+bookSchema.static(
+  "updateBookStatus",
+  async function (bookId: Types.ObjectId, quantity: number): Promise<Book> {
+    const book = await this.findById(bookId);
+    if (!book) {
+      throw new Error("Book not found.");
+    }
+
+    if (book.copies < quantity) {
+      throw new Error("Not enough copies available.");
+    }
+    book.copies -= quantity;
+    if (book.copies === 0) {
+      book.available = false;
+    }
+
+    await book.save();
+    return book;
+  }
+);
+
+export const Books = model<Book, BookModelType>("Books", bookSchema);

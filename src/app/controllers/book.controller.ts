@@ -63,7 +63,8 @@ export const retrieveBooks = catchAsyncError(
 
     const books = (await Books.find(query)
       .sort({ [sortBy]: sort === "desc" ? -1 : 1 })
-      .limit(+limit)) as Partial<Book[]>; 
+      .limit(+limit)) as Partial<Book[]>; // (+limit) -- Convert string into number
+
     // If no books are found, forward an error to error handling middleware
     if (!books.length) {
       return next(new ErrorHandler("Books not found!", 400));
@@ -134,7 +135,7 @@ export const updateBook = catchAsyncError(
     // 'runValidators: true' runs schema validators on update
     const updatedBook = await Books.findByIdAndUpdate(
       bookId,
-      { $set: req.body },
+      { $set: { ...req.body, available: true } },
       { new: true, runValidators: true }
     );
 
