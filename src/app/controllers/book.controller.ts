@@ -63,8 +63,7 @@ export const retrieveBooks = catchAsyncError(
 
     const books = (await Books.find(query)
       .sort({ [sortBy]: sort === "desc" ? -1 : 1 })
-      .limit(+limit)) as Partial<Book[]>; // (+limit) -- Convert string into number
-
+      .limit(+limit)) as Partial<Book[]>; 
     // If no books are found, forward an error to error handling middleware
     if (!books.length) {
       return next(new ErrorHandler("Books not found!", 400));
