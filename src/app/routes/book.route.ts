@@ -9,6 +9,7 @@ import {
 } from "../controllers/book.controller";
 import validateRequest from "../middlewares/validateRequest";
 
+
 const bookRoute = express.Router();
 
 bookRoute.post("/books", validateRequest(createBookSchema), createBook);
